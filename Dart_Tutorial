@@ -1,38 +1,78 @@
 <h1>How to Fetch a Full Kundali Report & Dynamic 5-Level Dasha Tree (Prana Dasha) in Dart / Flutter</h1>
 
-<p>This complete step-by-step integration tutorial demonstrates how to set up, integrate, and build a full Vedic Astrology system using the <strong>Jyothisya API</strong> via RapidAPI inside a <strong>Dart or Flutter</strong> application. You will learn how to generate a complete Kundali report and dynamically calculate a <strong>5-Level Vimshottari Dasha Tree (down to Prana Dasha)</strong> using pure Dart code.</p>
+<p>This complete step-by-step integration guide demonstrates how to seamlessly build a production-grade Vedic Astrology system using the <strong>Jyothisya API</strong> via RapidAPI inside a <strong>Dart or Flutter</strong> application. You will learn how to generate a complete Kundali report and dynamically fetch a <strong>5-Level Vimshottari Dasha Tree (down to Prana Dasha)</strong> using pure Dart code.</p>
 
 <hr />
 
 <h2>🎯 What You Will Learn</h2>
 <ul>
-  <li><strong>Step 1:</strong> Understanding the API architecture & dynamic 2-step dasha strategy.</li>
-  <li><strong>Step 2:</strong> Setting up birth parameters & HTTP request headers in Dart.</li>
-  <li><strong>Step 3:</strong> Fetching the core Kundali report & Level 1–3 Dashas (<code>/full-report</code>).</li>
-  <li><strong>Step 4:</strong> Fetching Level 4 (Sookshma) & Level 5 (Prana) Dashas on-demand (<code>/dasha/sub-tree</code>).</li>
-  <li><strong>Step 5:</strong> Production-ready Dart / Flutter API service implementation.</li>
-  <li><strong>Step 6:</strong> Expected JSON payload structures for strong type modeling.</li>
-  <li><strong>Step 7:</strong> Flutter UI ExpansionTile / Tree View integration pattern.</li>
+  <li><strong>Step 1: Create a New GitHub Repository for Your Documentation</strong></li>
+  <li><strong>Step 2: Set Up HTTP Dependencies in Your Flutter / Dart Project</strong></li>
+  <li><strong>Step 3: Understand the Two-Step On-Demand Architectural Strategy</strong></li>
+  <li><strong>Step 4: Configure Birth Input Parameters & Request Headers</strong></li>
+  <li><strong>Step 5: Fetch Core Kundali Report & Level 1–3 Dashas (<code>/full-report</code>)</strong></li>
+  <li><strong>Step 6: Fetch Level 4 (Sookshma) & Level 5 (Prana) Dashas On-Demand (<code>/dasha/sub-tree</code>)</strong></li>
+  <li><strong>Step 7: Implement the Complete Production-Ready Dart API Service</strong></li>
+  <li><strong>Step 8: Parse Expected JSON Response Payloads into Dart Models</strong></li>
+  <li><strong>Step 9: Build the Flutter UI (Nested ExpansionTile Integration Workflow)</strong></li>
+  <li><strong>Step 10: Link Your GitHub Documentation to RapidAPI Studio</strong></li>
 </ul>
 
 <hr />
 
-<h2>🏗️ Step 1: Architectural Strategy (Two-Step On-Demand Fetching)</h2>
+<h2>📌 Step 1: Create a New GitHub Repository for Your Documentation</h2>
 
-<p>Calculating 5 deep levels of Vimshottari Dashas upfront generates over <strong>10,000 sub-periods (~3MB+ JSON output)</strong>. Requesting all 5 levels in a single HTTP call causes unnecessarily slow network responses, high memory overhead, and excessive mobile data consumption on mobile devices.</p>
+<p>To keep your documentation organized, clean, and easily maintainable across updates, host the full tutorial source on GitHub:</p>
+
+<ol>
+  <li>Go to <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub.com</a> and log into your developer account.</li>
+  <li>Click the <strong><code>+</code></strong> icon at the top-right corner and select <strong>New repository</strong>.</li>
+  <li>Set the repository name (e.g., <code>jyothisya-flutter-integration-guide</code>).</li>
+  <li>Select <strong>Public</strong> so developers and API consumers can access it without authentication barriers.</li>
+  <li>Check the box next to <strong>Add a README file</strong>.</li>
+  <li>Click <strong>Create repository</strong>.</li>
+  <li>Open the newly created <code>README.md</code> file, click the pencil icon (<strong>Edit this file</strong>), and paste this HTML/Markdown documentation. Click <strong>Commit changes</strong> when done.</li>
+</ol>
+
+<hr />
+
+<h2>📦 Step 2: Set Up HTTP Dependencies in Your Flutter / Dart Project</h2>
+
+<p>Before writing the integration logic, add the standard HTTP networking package to your Dart runtime or Flutter app.</p>
+
+<p>Open your project's <code>pubspec.yaml</code> file and add <code>http</code> under the <code>dependencies</code> block:</p>
+
+<pre><code class="language-yaml">dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.1.0 # Standard HTTP client package for Dart
+</code></pre>
+
+<p>Then, execute the package fetch command in your terminal:</p>
+
+<pre><code class="language-bash">flutter pub get
+# Or for pure Dart projects:
+dart pub get
+</code></pre>
+
+<hr />
+
+<h2>🏗️ Step 3: Understand the Two-Step On-Demand Architectural Strategy</h2>
+
+<p>Calculating 5 deep levels of Vimshottari Dashas upfront generates over <strong>10,000 sub-periods (~3MB+ raw JSON payload)</strong>. Requesting all 5 levels in a single HTTP call causes unnecessarily slow network responses, high memory overhead, and excessive mobile data consumption on mobile devices.</p>
 
 <p>To optimize mobile app performance, <strong>Jyothisya API</strong> employs a <strong>Two-Step On-Demand Strategy</strong>:</p>
 
 <ol>
   <li><strong>Primary Request (<code>/full-report</code>):</strong> Loads the primary birth chart, planetary positions, house cusps, yogas, panchang, and the top <strong>Level 1–3 Dasha tree</strong> (Maha &rarr; Antar &rarr; Pratyantar).</li>
-  <li><strong>On-Demand Sub-Request (<code>/dasha/sub-tree</code>):</strong> When a Flutter app user taps to expand a specific Pratyantar node in the UI, a background HTTP GET call fetches <strong>Level 4 (Sookshma)</strong> and <strong>Level 5 (Prana)</strong> sub-periods strictly for that branch.</li>
+  <li><strong>On-Demand Sub-Request (<code>/dasha/sub-tree</code>):</strong> When a Flutter app user taps to expand a specific Pratyantar node in the UI, a background HTTP GET call fetches <strong>Level 4 (Sookshma)</strong> and <strong>Level 5 (Prana)</strong> sub-periods strictly for that selected branch.</li>
 </ol>
 
 <hr />
 
-<h2>🔑 Step 2: API Input Parameters Reference</h2>
+<h2>🔑 Step 4: Configure Birth Input Parameters & Request Headers</h2>
 
-<p>Both API endpoints accept query parameters structured in the following format:</p>
+<p>Both endpoints accept input parameters passed as a key-value structure in the HTTP query string:</p>
 
 <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
   <thead>
@@ -91,9 +131,9 @@
 
 <hr />
 
-<h2>🚀 Step 3: Fetching Full Kundali & Level 1–3 Dashas</h2>
+<h2>🚀 Step 5: Fetch Core Kundali Report & Level 1–3 Dashas (<code>/full-report</code>)</h2>
 
-<p>Call the <strong><code>/full-report</code></strong> endpoint using Dart's <code>http.get()</code> to retrieve primary birth chart details alongside <strong>Level 1 to 3 Vimshottari Dashas</strong>.</p>
+<p>Make a GET request to <strong><code>/full-report</code></strong> using Dart's <code>http.get()</code> to retrieve the primary birth chart details alongside <strong>Level 1 to 3 Vimshottari Dashas</strong>.</p>
 
 <p><strong>API Request Specification:</strong></p>
 <ul>
@@ -109,11 +149,11 @@
 
 <hr />
 
-<h2>🔍 Step 4: Fetching Level 4 (Sookshma) & Level 5 (Prana) Dashas On-Demand</h2>
+<h2>🔍 Step 6: Fetch Level 4 (Sookshma) & Level 5 (Prana) Dashas On-Demand (<code>/dasha/sub-tree</code>)</h2>
 
-<p>When an end-user expands a Pratyantar Dasha node in your Flutter application, execute a <code>GET</code> request to <strong><code>/dasha/sub-tree</code></strong> passing the parent nodes' identifiers:</p>
+<p>When an end-user expands a Pratyantar Dasha node in your Flutter UI, execute an HTTP GET request to <strong><code>/dasha/sub-tree</code></strong> passing the parent node identifiers:</p>
 
-<p><strong>Sub-Tree Required Parameters:</strong></p>
+<p><strong>Sub-Tree Required Query Parameters:</strong></p>
 <ul>
   <li>All standard birth parameters (<code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code>, <code>latitude</code>, <code>longitude</code>, <code>timezoneName</code>)</li>
   <li><strong><code>parent_maha</code>:</strong> Name of the parent Maha Dasha planet (e.g., <code>"Sun"</code>)</li>
@@ -123,17 +163,9 @@
 
 <hr />
 
-<h2>💻 Step 5: Complete Production-Ready Dart Implementation</h2>
+<h2>💻 Step 7: Implement the Complete Production-Ready Dart API Service</h2>
 
-<p>First, ensure you have added the <code>http</code> package to your Flutter project's <code>pubspec.yaml</code> file:</p>
-
-<pre><code class="language-yaml">dependencies:
-  flutter:
-    sdk: flutter
-  http: ^1.1.0
-</code></pre>
-
-<p>Below is the complete, self-contained Dart service class utilizing <code>package:http/http.dart</code> and <code>dart:convert</code>:</p>
+<p>Below is a clean, fully commented, self-contained Dart service class utilizing <code>package:http/http.dart</code> and <code>dart:convert</code>:</p>
 
 <pre><code class="language-dart">import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -143,7 +175,7 @@ class JyothisyaApiService {
   static const String _rapidApiKey = 'YOUR_RAPIDAPI_KEY_HERE';
   static const String _rapidApiHost = 'mindastro-api.p.rapidapi.com';
 
-  // Base Birth Details
+  // Standard Base Birth Details Map
   static final Map&lt;String, String&gt; _baseBirthParams = {
     'year': '1995',
     'month': '6',
@@ -154,18 +186,18 @@ class JyothisyaApiService {
     'latitude': '6.9271',
     'longitude': '79.8612',
     'timezoneName': 'Asia/Colombo',
-    'lang': 'si', // Language set to Sinhala
+    'lang': 'si', // Set language to Sinhala
     'ayanamsa': 'lahiri',
     'house_system': 'sripati',
   };
 
-  // HTTP Request Headers
+  // HTTP Header Map
   static final Map&lt;String, String&gt; _headers = {
     'x-rapidapi-key': _rapidApiKey,
     'x-rapidapi-host': _rapidApiHost,
   };
 
-  /// Step 3: Fetch Full Astrology Report (Level 1–3 Dashas)
+  /// Step 5 Method: Fetch Full Astrology Report (Level 1–3 Dashas)
   static Future&lt;Map&lt;String, dynamic&gt;?&gt; getFullAstrologyReport() async {
     try {
       final uri = Uri.https(_rapidApiHost, '/api/v1/full-report', _baseBirthParams);
@@ -177,7 +209,7 @@ class JyothisyaApiService {
         final Map&lt;String, dynamic&gt; decoded = jsonDecode(response.body);
         final report = decoded['data'];
 
-        print('=== Primary Chart Loaded ===');
+        print('=== Primary Chart Loaded Successfully ===');
         print('Lagna Sign: ${report['lagna']['sign_translated']}');
         print('Total Yogas: ${report['yogas']['summary']['total_count']}');
         print('Maha Dashas Loaded: ${report['dasha'].length}');
@@ -192,13 +224,14 @@ class JyothisyaApiService {
     return null;
   }
 
-  /// Step 4: Fetch Level 4 (Sookshma) & Level 5 (Prana) Dashas On-Demand
+  /// Step 6 Method: Fetch Level 4 (Sookshma) & Level 5 (Prana) Dashas On-Demand
   static Future&lt;Map&lt;String, dynamic&gt;?&gt; fetchPranaDashaTree({
     required String parentMaha,
     required String parentAntar,
     required String parentPratyantar,
   }) async {
     try {
+      // Merge base parameters with parent dasha node identifiers
       final subTreeParams = Map&lt;String, String&gt;.from(_baseBirthParams)..addAll({
         'parent_maha': parentMaha,
         'parent_antar': parentAntar,
@@ -214,7 +247,7 @@ class JyothisyaApiService {
         final Map&lt;String, dynamic&gt; decoded = jsonDecode(response.body);
         final subTree = decoded['data'];
 
-        print('=== Sookshma & Prana Dasha Sub-Tree Results ===');
+        print('=== Sookshma & Prana Dasha Sub-Tree Loaded ===');
         final List sookshmaList = subTree['sookshma_dashas'] ?? [];
         
         for (var i = 0; i &lt; sookshmaList.length; i++) {
@@ -239,12 +272,12 @@ class JyothisyaApiService {
   }
 }
 
-// Execution Entry Point
+// Main Execution Flow
 void main() async {
-  // 1. Initial Load: Chart + Level 1-3 Dasha Tree
+  // 1. Initial Call: Load main report and Level 1-3 Dashas
   final report = await JyothisyaApiService.getFullAstrologyReport();
 
-  // 2. Dynamic Fetch: User clicks Sun -> Sun -> Rahu node
+  // 2. Dynamic Call: User expands Sun -> Sun -> Rahu node in Flutter UI
   if (report != null) {
     await JyothisyaApiService.fetchPranaDashaTree(
       parentMaha: 'Sun',
@@ -257,9 +290,9 @@ void main() async {
 
 <hr />
 
-<h2>📄 Step 6: Expected JSON Response Structures</h2>
+<h2>📄 Step 8: Parse Expected JSON Response Payloads into Dart Models</h2>
 
-<h3>1. <code>/full-report</code> Payload Structure (Truncated Preview)</h3>
+<h3>1. <code>/full-report</code> Response Sample (Level 1–3 Tree Preview)</h3>
 
 <pre><code class="language-json">{
   "status": "success",
@@ -307,7 +340,7 @@ void main() async {
 }
 </code></pre>
 
-<h3>2. <code>/dasha/sub-tree</code> Payload Structure (Level 4 Sookshma & Level 5 Prana)</h3>
+<h3>2. <code>/dasha/sub-tree</code> Response Sample (Level 4 Sookshma & Level 5 Prana)</h3>
 
 <pre><code class="language-json">{
   "status": "success",
@@ -337,24 +370,56 @@ void main() async {
 
 <hr />
 
-<h2>🎨 Step 7: Flutter UI Tree View Integration Workflow</h2>
+<h2>🎨 Step 9: Build the Flutter UI (Nested ExpansionTile Integration Workflow)</h2>
 
-<p>To implement an interactive 5-level expandable tree view in Flutter (using widgets like <code>ExpansionTile</code> or <code>ListView</code>):</p>
+<p>To present this deep hierarchical tree inside a smooth Flutter user interface:</p>
 
 <ol>
-  <li><strong>Render Levels 1–3:</strong> Bind the <code>dasha</code> array from <code>/full-report</code> to nested <code>ExpansionTile</code> widgets (Maha &rarr; Antar &rarr; Pratyantar).</li>
-  <li><strong>Attach Expansion Callbacks:</strong> Pass an <code>onExpansionChanged</code> callback to the Pratyantar-level <code>ExpansionTile</code>.</li>
-  <li><strong>Dynamic On-Demand Fetching:</strong> When expanded, if the sub-tree state is empty, display a <code>CircularProgressIndicator</code> and call <code>JyothisyaApiService.fetchPranaDashaTree()</code>.</li>
-  <li><strong>Update State:</strong> Call <code>setState()</code> or update your state management store (Provider, Bloc, Riverpod) to render the nested <code>sookshma_dashas</code> and <code>prana_dashas</code>.</li>
+  <li><strong>Render Levels 1–3:</strong> Bind the initial <code>dasha</code> array returned from <code>/full-report</code> to nested Flutter <code>ExpansionTile</code> widgets (Maha &rarr; Antar &rarr; Pratyantar).</li>
+  <li><strong>Attach Expansion Listener:</strong> Use the <code>onExpansionChanged</code> callback on the 3rd-level (Pratyantar) <code>ExpansionTile</code>.</li>
+  <li><strong>Dynamic Sub-Tree Fetching:</strong> When expanded by the user, if the local state for Level 4/5 is unpopulated, trigger a loading indicator (<code>CircularProgressIndicator</code>) and invoke <code>JyothisyaApiService.fetchPranaDashaTree()</code>.</li>
+  <li><strong>Update Reactive State:</strong> Call <code>setState()</code> or emit a new state in your state management framework (Provider, Bloc, Riverpod) to instantly draw the nested Level 4 (Sookshma) and Level 5 (Prana) tiles.</li>
 </ol>
 
 <hr />
 
-<h2>💡 Summary</h2>
+<h2>🔗 Step 10: Link Your GitHub Documentation to RapidAPI Studio</h2>
 
-<p>By adopting this <strong>2-step strategy in Flutter/Dart</strong>:</p>
+<p>Once your repository is updated on GitHub, publish a concise Markdown entry on your <strong>RapidAPI Studio Tutorials Tab</strong> that links directly to your public GitHub guide:</p>
+
+<p><strong>Copy and paste this markdown block into RapidAPI Studio Tutorials Editor:</strong></p>
+
+<pre><code class="language-markdown"># How to Fetch a Full Kundali Report & Dynamic 5-Level Dasha Tree in Dart / Flutter
+
+This guide covers the complete Dart/Flutter integration pattern for building a high-performance Vedic Astrology mobile app, featuring a dynamic **5-Level Vimshottari Dasha Tree (Prana Dasha)** fetching system.
+
+### 📚 Complete Guide & Production Dart Code
+
+To view the full architectural design, Flutter UI integration guidelines, and complete copy-pasteable Dart code, visit our official documentation repository on GitHub:
+
+👉 **[View Full Dart / Flutter Integration Tutorial on GitHub](YOUR_GITHUB_README_LINK_HERE)** *(Right-click or Ctrl+Click to open in new tab)*
+
+---
+
+### 🔑 Quick Summary
+* **Step 1:** Create GitHub Documentation Repository
+* **Step 2:** Add HTTP Package Dependencies
+* **Step 3:** Dynamic 2-Step Fetching Architecture
+* **Step 4:** API Input Parameters Reference
+* **Step 5:** Fetching Core Kundali & Level 1-3 Dashas
+* **Step 6:** Fetching Level 4 & 5 Dashas On-Demand
+* **Step 7:** Full Production-Ready Dart Service Implementation
+* **Step 8:** Expected JSON Payloads
+* **Step 9:** Flutter UI ExpansionTile Tree View Integration
+</code></pre>
+
+<hr />
+
+<h2>💡 Summary & Performance Gains</h2>
+
+<p>By implementing this <strong>2-step strategy in your Dart / Flutter app</strong>:</p>
 <ul>
-  <li>App startup and initial chart render times remain under <strong>10ms</strong>.</li>
-  <li>Mobile network consumption drops from <strong>~3MB+ to ~15KB</strong> per initial query.</li>
-  <li>Your users receive sub-second access to accurate <strong>5-level Prana Dasha calculations</strong> without app freezing or UI lag.</li>
+  <li>Initial app load times for chart generation stay under <strong>10ms</strong>.</li>
+  <li>Mobile network bandwidth consumption drops dramatically from <strong>~3MB+ to ~15KB</strong> per initial Kundali lookup.</li>
+  <li>Your users enjoy instant access to precise <strong>5-level Vimshottari Dasha calculations</strong> without experiencing UI jank or memory freeze.</li>
 </ul>
