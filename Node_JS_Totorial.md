@@ -1,4 +1,4 @@
-<h1>How to Fetch a Full Kundali Report & Dynamic 5-Level Dasha Tree (Prana Dasha) with Node JS</h1>
+<h1>How to Fetch a Full Kundali Report & Dynamic 5-Level Dasha Tree (Prana Dasha) in Node JS</h1>
 
 <p>This complete step-by-step tutorial demonstrates how to set up, integrate, and build a full Vedic Astrology system using the <strong>Jyothisya API</strong> via RapidAPI. You will learn how to generate a complete Kundali report and dynamically calculate a <strong>5-Level Vimshottari Dasha Tree (down to Prana Dasha)</strong> in Node.js / JavaScript.</p>
 
